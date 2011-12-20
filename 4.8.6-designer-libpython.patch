@@ -1,0 +1,11 @@
+--- origsrc/PyQt-x11-gpl-4.8.6/configure.py	2011-10-24 06:30:34.000000000 -0500
++++ src/PyQt-x11-gpl-4.8.6/configure.py	2011-12-19 18:30:34.929093800 -0600
+@@ -959,7 +959,7 @@ include(%s)
+                     sipconfig.inform("Qt Designer plugin disabled because Python library is static")
+                     opts.designer_plugin = False
+ 
+-                pysh_lib = ducfg.get("LDLIBRARY", "")
++                pysh_lib = ducfg.get("DLLLIBRARY", "")
+ 
+             if opts.designer_plugin:
+                 sipconfig.inform("Creating Qt Designer plugin Makefile...")
