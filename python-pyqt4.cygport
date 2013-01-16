@@ -1,5 +1,8 @@
 inherit python qt4
 
+NAME="python-pyqt4"
+VERSION=4.9.6
+RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Qt4 bindings"
 DESCRIPTION="PyQt is a set of Python bindings for the Qt application
@@ -8,7 +11,7 @@ implemented as a set of Python modules and contain over 300 classes and
 over 6,000 functions and methods."
 HOMEPAGE="http://www.riverbankcomputing.co.uk/software/pyqt/"
 ORIG_PN="PyQt-x11-gpl"
-SRC_URI="http://www.riverbankcomputing.com/static/Downloads/PyQt4/${ORIG_PN}-${PV}.tar.gz"
+SRC_URI="mirror://sourceforge/pyqt/${ORIG_PN}-${PV}.tar.gz"
 PATCH_URI="4.8.6-designer-libpython.patch"
 
 python_pyqt4_CONTENTS="--exclude=port_v3 usr/"
