@@ -1,7 +1,7 @@
 inherit python qt4
 
 NAME="python-pyqt4"
-VERSION=4.9.6
+VERSION=4.10.2
 RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Qt4 bindings"
@@ -28,11 +28,11 @@ src_compile() {
 	cp ${S}/configure.py .
 
 	${PYTHON} configure.py \
-		-b ${PYTHON_SITELIB}/PyQt4 \
-		-c \
-		-d ${PYTHON_SITELIB} \
-		-p ${QT4_PLUGINSDIR} \
-		-q ${QT4_QMAKE} \
+		--bindir ${PYTHON_SITELIB}/PyQt4 \
+		--concatenate \
+		--destdir ${PYTHON_SITELIB} \
+		--plugin-destdir ${QT4_PLUGINSDIR} \
+		--qmake ${QT4_QMAKE} \
 		--assume-shared \
 		--confirm-license \
 		"CFLAGS+=${CFLAGS}" "CXXFLAGS+=${CXXFLAGS}" \
