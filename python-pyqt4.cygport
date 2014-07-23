@@ -1,7 +1,7 @@
 inherit python qt4
 
 NAME="python-pyqt4"
-VERSION=4.10.3
+VERSION=4.10.4
 RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Qt4 bindings"
@@ -14,7 +14,6 @@ ORIG_PN="PyQt-x11-gpl"
 SRC_URI="mirror://sourceforge/pyqt/${ORIG_PN}-${PV}.tar.gz"
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/PyQt4.git/plain/PyQt-x11-gpl-4.10-pyuic_shbang.patch
-	http://pkgs.fedoraproject.org/cgit/PyQt4.git/plain/PyQt-x11-gpl-4.10.2-phonon_detect.patch
 	4.8.6-designer-libpython.patch
 "
 
