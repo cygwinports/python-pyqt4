@@ -1,7 +1,7 @@
-inherit python qt4
+inherit python2 python3 qt4
 
 NAME="python-pyqt4"
-VERSION=4.11.4
+VERSION=4.12
 RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Qt4 bindings"
@@ -10,28 +10,39 @@ framework and runs on all platforms supported by Qt. The bindings are
 implemented as a set of Python modules and contain over 300 classes and
 over 6,000 functions and methods."
 HOMEPAGE="http://www.riverbankcomputing.co.uk/software/pyqt/"
-SRC_URI="mirror://sourceforge/pyqt/PyQt-x11-gpl-${VERSION}.tar.gz"
-SRC_DIR="PyQt-x11-gpl-${VERSION}"
+SRC_URI="mirror://sourceforge/pyqt/PyQt4_gpl_x11-${VERSION}.tar.gz"
+SRC_DIR="PyQt4_gpl_x11-${VERSION}"
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/PyQt4.git/plain/PyQt-x11-gpl-4.10.4-pyuic_shbang.patch
 	4.8.6-designer-libpython.patch
 "
 
-REQUIRES="python-dbus"
+PKG_NAMES="python2-pyqt4 python3-pyqt4 ${NAME}-common ${NAME}-devel"
+python2_pyqt4_REQUIRES="python2-dbus ${NAME}-common"
+python2_pyqt4_OBSOLETES=${NAME}
+python2_pyqt4_CONTENTS="
+	${PYTHON2_SITELIB#/}
+	${QT4_PLUGINSDIR#/}/designer/cygpyqt4.dll
+"
+python3_pyqt4_REQUIRES="python3-dbus ${NAME}-common"
+python3_pyqt4_CONTENTS=${PYTHON3_SITELIB#/}
+python_pyqt4_common_CONTENTS="
+	usr/share/doc/${NAME}
+	usr/share/qt4/qsci/
+"
+python_pyqt4_devel_CONTENTS="usr/share/sip/PyQt4/"
+python_pyqt4_debuginfo_OBSOLETES="python3-pyqt4-debuginfo"
 
 DIFF_EXCLUDES="opengl_types.sip"
 
 src_compile() {
-	lndirs
-	cd ${B}
+	mkdir -p ${B}/py2
+	cd ${B}/py2
 
-	rm -f configure.py
-	cp ${S}/configure.py .
-
-	${PYTHON} configure.py \
-		--bindir ${PYTHON_SITELIB}/PyQt4 \
+	${PYTHON2} ${S}/configure.py \
+		--bindir ${PYTHON2_SITELIB}/PyQt4 \
 		--concatenate \
-		--destdir ${PYTHON_SITELIB} \
+		--destdir ${PYTHON2_SITELIB} \
 		--plugin-destdir ${QT4_PLUGINSDIR} \
 		--qmake ${QT4_QMAKE} \
 		--assume-shared \
@@ -39,16 +50,32 @@ src_compile() {
 		CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" STRIP=: \
 		|| error "configure.py failed"
 
-	cygmake # -j1
+	cygmake
+
+	mkdir -p ${B}/py3
+	cd ${B}/py3
+
+	${PYTHON3} ${S}/configure.py \
+		--bindir ${PYTHON3_SITELIB}/PyQt4 \
+		--concatenate \
+		--destdir ${PYTHON3_SITELIB} \
+		--plugin-destdir ${QT4_PLUGINSDIR} \
+		--qmake ${QT4_QMAKE} \
+		--assume-shared \
+		--confirm-license \
+		CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" STRIP=: \
+		|| error "configure.py failed"
+
+	cygmake
 }
 
 src_install() {
-	cd ${B}
+	cd ${B}/py3
 	cyginstall INSTALL_ROOT=${D}
-	# python3 code
-	rm -fr ${D}${PYTHON_SITELIB}/PyQt4/uic/port_v3/
-
-	python_optimize
+	rm -fr ${D}${PYTHON3_SITELIB}/PyQt4/uic/port_v2/
+	cd ${B}/py2
+	cyginstall INSTALL_ROOT=${D}
+	rm -fr ${D}${PYTHON2_SITELIB}/PyQt4/uic/port_v3/
 
 	keepdir ${QT4_PLUGINSDIR}/designer/python
 
