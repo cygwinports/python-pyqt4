@@ -1,7 +1,7 @@
 inherit python2 python3 qt4
 
 NAME="python-pyqt4"
-VERSION=4.12
+VERSION=4.12.1
 RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Qt4 bindings"
